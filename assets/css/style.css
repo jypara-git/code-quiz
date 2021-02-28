@@ -74,3 +74,14 @@ p {
     align-items: baseline;
     width: 100%;
 }
+.form-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.input-box {
+    height: 30px;
+    border-radius: 10px;
+    padding-left: 10px;
+}

@@ -45,15 +45,93 @@ var questions = [
         correct: "It uses === and !== instead" 
     }
 ];
+var highScores = [];
 const startingMinutes = 2;
 let time = startingMinutes * 60;
 let finalTime = 0;
 
 const countDownEl = document.getElementById("countdown");
 
+var saveScores = function() {
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+}
+var loadScores = function() {
+    highScores = localStorage.getItem("highScores");
+    if (highScores === null) {
+        highScores = [];
+        return false;
+    }
+    highScores = JSON.parse(highScores);
+}
+
+var createHighScoresContainer = function() {
+    var lastPageEl = document.createElement("div");
+    lastPageEl.className = "outside-box";
+    lastPageEl.id = "last-page";
+
+    var textEl = document.createElement("h3");
+    textEl.innerText = " High scores";
+    lastPageEl.appendChild(textEl);
+    
+    var listItemEl = document.createElement("ul");
+    listItemEl.className = "input-box";
+    listItemEl.id = "list";
+    lastPageEl.appendChild(listItemEl);
+
+    var listEl = document.createElement("li");
+    listEl.className = "input-box"
+    
+
+     
+var handleSubmitScore = function(event) {
+    var score = finalTime;
+    var initials = document.getElementById("input-initials").value;
+    highScores.push({score: score, initials: initials});
+    saveScores();
+    var allDoneEl = document.querySelector("#done-box");
+    allDoneEl.remove();
+    createHighScoresContainer();
+}
+var createEndPage = function() {
+    var allDoneEl = document.createElement("div");
+    allDoneEl.className = "outside-box";
+    allDoneEl.id = "done-box";
+
+    var headTextEl = document.createElement("h3");
+    headTextEl.innerText = "All done!";
+    allDoneEl.appendChild(headTextEl);
+
+    var finalScoreEl = document.createElement("p");
+    finalScoreEl.innerText = "Your final score is " + finalTime;
+    allDoneEl.appendChild(finalScoreEl);
+
+    var initialFormEl = document.createElement("div");
+    initialFormEl.className = "form-group";
+    var formTextEl = document.createElement("p");
+    formTextEl.innerText = "Enter initials:";
+    initialFormEl.appendChild(formTextEl);
+    var formBoxEl = document.createElement("input");
+    formBoxEl.className = "input-box";
+    formBoxEl.type = "text";
+    formBoxEl.placeholder = "Initials here";
+    formBoxEl.id = "input-initials";
+    initialFormEl.appendChild(formBoxEl);
+
+    allDoneEl.appendChild(initialFormEl);
+
+    var submitButtonEl = document.createElement("button");
+    submitButtonEl.textContent = "Submit";
+    submitButtonEl.className = "btn";
+    submitButtonEl.id = "save-initial";
+    submitButtonEl.type = "submit";
+    submitButtonEl.addEventListener("click", handleSubmitScore);
+    allDoneEl.appendChild(submitButtonEl);
+    document.body.appendChild(allDoneEl);
+}
+
+
 function updateCountdown() {
     if (currentQuestionIndex >= questions.length) {
-        finalTime = time;
         clearInterval(time = 0);
     }
     
@@ -61,6 +139,7 @@ function updateCountdown() {
         var sectionContainer = document.querySelector("#container");
         if (sectionContainer) {
             sectionContainer.remove();
+            createEndPage();
         }
        
         clearInterval(time = 0);
@@ -75,13 +154,11 @@ var buttonElStart = document.querySelector("#start-button");
 
 
 var startQuiz = function(event) {
+    loadScores();
     createQuestionContainer();
     setInterval(updateCountdown, 1000);
     var divStart = document.querySelector("#first-page");
     var sectionQuestions = document.querySelector("#container");
-   
- 
-
 };
 buttonElStart.addEventListener("click", startQuiz);
 
@@ -103,9 +180,10 @@ var handleSelectedButton = function(event) {
 var updateQuestionEL = function() {
     // all right answers
     if (currentQuestionIndex >= questions.length) {
+        finalTime = time;
         var sectionContainer = document.querySelector("#container");
         sectionContainer.remove();
-
+        createEndPage();
         return;
     }
     var questionDataObj = questions[currentQuestionIndex];
@@ -170,10 +248,4 @@ var createQuestionContainer = function() {
     document.body.appendChild(sectionContainer);
     updateQuestionEL();
 };
-var gameOverContainer = function() {
-    var allDone = document.createElement("div");
-    allDone.className = "outside-box";
 
-    var 
-    
-}
