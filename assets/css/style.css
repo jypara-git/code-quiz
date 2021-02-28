@@ -61,6 +61,7 @@ p {
     max-height: 50px;
     margin-bottom: 15px;
     color: white;
+    margin-left: 10px;
 }
 
 .btn:hover {

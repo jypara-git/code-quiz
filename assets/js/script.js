@@ -63,7 +63,13 @@ var loadScores = function() {
     }
     highScores = JSON.parse(highScores);
 }
-
+var clearScores = function(event) {
+    highScores = [];
+    saveScores();
+    var lastPageEl = document.querySelector("#last-page");
+    lastPageEl.remove();
+    createHighScoresContainer();
+}
 var createHighScoresContainer = function() {
     var lastPageEl = document.createElement("div");
     lastPageEl.className = "outside-box";
@@ -74,13 +80,58 @@ var createHighScoresContainer = function() {
     lastPageEl.appendChild(textEl);
     
     var listItemEl = document.createElement("ul");
-    listItemEl.className = "input-box";
     listItemEl.id = "list";
     lastPageEl.appendChild(listItemEl);
+    for(i = 0; i < highScores.length; i++) {
+        var listEl = document.createElement("li");
+        listEl.innerHTML = highScores[i].initials + ": " + highScores[i].score;
+        listItemEl.appendChild(listEl);
+    }
+    var buttons = document.createElement("div");
+    buttons.className = "form-group";
+   
+    var buttonBack = document.createElement("button");
+    buttonBack.textContent = "Go Back";
+    buttonBack.className = "btn";
+    buttonBack.id = "go-back";
+    buttonBack.addEventListener("click", createStartPage);
+    buttons.appendChild(buttonBack);
 
-    var listEl = document.createElement("li");
-    listEl.className = "input-box"
+    var buttonClear = document.createElement("button");
+    buttonClear.textContent = "Clear high scores";
+    buttonClear.className = "btn";
+    buttonClear.id = "clear";
+    buttonClear.addEventListener("click", clearScores);
     
+    buttons.appendChild(buttonClear);
+    
+    lastPageEl.appendChild(buttons);
+    document.body.appendChild(lastPageEl);
+}
+
+var createStartPage = function(event) {
+    var lastPageEl= document.querySelector("#last-page");
+    lastPageEl.remove();
+    var startingPage = document.createElement("div");
+    startingPage.className = "first-page";
+    startingPage.id = "first-page";
+    var titleText = document.createElement("h3");
+    titleText.innerText = "Coding Quiz Challenge";
+    startingPage.appendChild(titleText);
+    var paragraphText = document.createElement("p");
+    paragraphText.innerHTML = "Try to answer the following code-related questions within the time limit.<br> Keep in mind that incorrect answers will penalize your score/time";
+    startingPage.appendChild(paragraphText);
+    var button = document.createElement("button");
+    button.className = "btn";
+    button.id = "start-button";
+    button.textContent = "Start Quiz";
+    button.addEventListener("click", startQuiz);
+    startingPage.appendChild(button);
+    time = startingMinutes * 60;
+    currentQuestionIndex = 0;
+    finalTime = 0;
+    document.body.appendChild(startingPage);
+}   
 
      
 var handleSubmitScore = function(event) {
