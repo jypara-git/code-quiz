@@ -25,6 +25,16 @@ header {
 .scores {
     color: var(--secondary);
 }
+p {
+    display: flex;
+}
+.first-page {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .name-text {
     color: var(--tertiary);
 }
@@ -36,6 +46,7 @@ header {
     max-width: 1000px;
     margin:auto;
 }
+
 .btn {
     outline: none;
     border: none;
@@ -51,7 +62,8 @@ header {
     margin-bottom: 15px;
     color: white;
 }
-.btn:focus {
+
+.btn:hover {
     background-color: var(--quaternary);
 }
 .btn-wrap {
